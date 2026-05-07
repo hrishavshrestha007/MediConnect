@@ -1,0 +1,164 @@
+@Clinic_HostAddress = http://localhost:5117
+
+
+GET {{Clinic_HostAddress}}/api/doctor
+Accept: application/json
+
+###
+
+GET {{Clinic_HostAddress}}/api/doctor/1
+Accept: application/json
+
+###
+
+GET {{Clinic_HostAddress}}/api/doctor/select
+Accept: application/json
+
+### 
+GET {{Clinic_HostAddress}}/api/doctor/search?term=maria
+Accept: application/json
+
+###
+
+POST {{Clinic_HostAddress}}/api/doctor
+Content-Type: application/json
+
+{
+  "FirstName": "John",
+  "LastName": "Doe",
+  "SpecialityId": 1,
+  "ClinicId": 1
+}
+
+###
+
+PUT {{Clinic_HostAddress}}/api/doctor/5
+Content-Type: application/json
+
+{
+  "Id": 1001,
+  "FirstName": "John",
+  "LastName": "Din",
+  "SpecialityId": 2,
+  "ClinicId": 1
+}
+
+###
+
+DELETE {{Clinic_HostAddress}}/api/doctor/5
+Accept: application/json
+
+########### Logins ############
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMDUiLCJzdWIiOiJzYW0ubWFsb25AZXhhbXBsZS5jb20iLCJqdGkiOiJkNDA0OWEwMy05OWE4LTRiYjItOTljNi1kOGNmYTExMWQzNWMiLCJleHAiOjE3NzgxMTY0MTMsImlzcyI6Ik1lZGlDb25uZWN0IiwiYXVkIjoiTWVkaUNvbm5lY3RVc2VycyJ9.YskKFSk7toZ87N0LJ0SlAQ_b5ZgXVrwlDdfl2cFOG2E
+
+POST {{Clinic_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "sam.malon@example.com",
+  "password": "password123"
+}
+
+###
+
+POST {{Clinic_HostAddress}}/api/auth/logout
+Accept: application/json
+Authorization: Bearer {{token}}
+
+########### PATIENTS ############
+
+GET {{Clinic_HostAddress}}/api/patient
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+GET {{Clinic_HostAddress}}/api/patient/2
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+POST {{Clinic_HostAddress}}/api/patient
+Content-Type: application/json
+
+{
+  "firstName": "Sam",
+  "lastName": "Malon",
+  "email": "sam.malon@example.com",
+  "password": "password123",
+  "birthdate": "1990-01-15T00:00:00",
+  "gender": "Male",
+  "socialSecurityNumber": "123-45-6789",
+  "taxNumber": "98-7654321",
+  "religion": "Christianity",
+  "driverLicenseNumber": "eb344567",
+  "medicalInsuranceMemberId": "MI4784567"
+}
+
+
+###
+
+PUT {{Clinic_HostAddress}}/api/patient/2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": 2,
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+###
+DELETE {{Clinic_HostAddress}}/api/patient/2
+Accept: application/json
+Authorization: Bearer {{token}}
+
+########### APPOINTMENTS ############
+
+### Registered user books (with token)
+POST {{Clinic_HostAddress}}/api/appointment/book
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{ 
+  "doctorId": 3, 
+  "appointmentDate": "2026-05-20T10:00:00", 
+  "durationMinutes": 45, 
+  "appointmentCategoryId": 2
+}
+
+### Book appointment as GUEST (no auth required)
+POST {{Clinic_HostAddress}}/api/appointment/book
+Content-Type: application/json
+
+{
+  "doctorId": 1,
+  "appointmentDate": "2026-05-20T10:00:00",
+  "durationMinutes": 30,
+  "appointmentCategoryId": 1,
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "jane.smith@example.com",
+  "birthdate": "1990-01-15T00:00:00"
+}
+
+### Move appointment (requires auth)
+POST {{Clinic_HostAddress}}/api/appointment/move
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "appointmentId": 3,
+  "newAppointmentDate": "2026-05-25T14:00:00",
+  "newDurationMinutes": 45
+}
+
+### Get my appointments (requires auth)
+GET {{Clinic_HostAddress}}/api/appointment/my-appointments
+Authorization: Bearer {{token}}
+
+
+### Cancel appointment (requires auth)
+POST {{Clinic_HostAddress}}/api/appointment/2/cancel
+Authorization: Bearer {{token}}
