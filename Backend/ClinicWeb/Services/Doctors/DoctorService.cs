@@ -19,6 +19,7 @@ namespace ClinicWeb.Services.Doctors
         {
             return await _context.Doctors
                 .Include(d => d.Speciality)
+                .Include(d => d.Clinic)
                 .ToListAsync();
         }
 
@@ -26,25 +27,13 @@ namespace ClinicWeb.Services.Doctors
         {
             var doctor = await _context.Doctors
                 .Include(d => d.Speciality)
+                .Include(d => d.Clinic)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             if (doctor == null)
                 throw new KeyNotFoundException($"Doctor with ID {id} not found.");
 
             return doctor;
-        }
-
-        // Used to populate the dropdown on the booking form
-        public async Task<IEnumerable<DoctorSelectDto>> GetAllForSelectAsync()
-        {
-            return await _context.Doctors
-                .Include(d => d.Speciality)
-                .Select(d => new DoctorSelectDto
-                {
-                    Id = d.Id,
-                    DisplayName = $"Dr. {d.FirstName} {d.LastName}"
-                })
-                .ToListAsync();
         }
 
         // Search by first or last name — required by the brief

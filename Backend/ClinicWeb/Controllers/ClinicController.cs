@@ -7,8 +7,7 @@ using ClinicWeb.Services.Clinics;
 
 namespace ClinicWeb.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/clinics")]
     public class ClinicController : ControllerBase
     {
         private readonly IClinicService _clinicService;
@@ -22,7 +21,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns> A list of all clinics. </returns>
 
-        //GET api/clinic
+        //GET api/clinics
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Clinic>>> GetAllClinics()
         {

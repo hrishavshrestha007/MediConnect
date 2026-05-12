@@ -2,6 +2,7 @@ using System.Text;
 using ClinicWeb.Data;
 using ClinicWeb.Models.Config;
 using ClinicWeb.Services;
+using ClinicWeb.Services.AppointmentCategories;
 using ClinicWeb.Services.Appointments;
 using ClinicWeb.Services.Auth;
 using ClinicWeb.Services.Clinics;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAppointmentCategoryServices, AppointmentCategoryServices>();
 
 //Swagger
 builder.Services.AddEndpointsApiExplorer();

@@ -7,6 +7,5 @@ namespace ClinicWeb.Services.Doctors
     public interface IDoctorService : ICrudService<Doctor, int>
     {
         Task<IEnumerable<DoctorSearchResultDto>> SearchAsync(string searchTerm);
-        Task<IEnumerable<DoctorSelectDto>> GetAllForSelectAsync();
     }
 }

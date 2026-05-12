@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ClinicWeb.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/appointment")]
     [ApiController]
     public class AppointmentController : ControllerBase
     {
@@ -57,7 +57,7 @@ namespace ClinicWeb.Controllers
                 }
 
                 await _appointmentService.BookAsync(request, patientId);
-                return Ok(new { message = "Appointment booked successfully." });
+                return CreatedAtAction(nameof(Book), new { message = "Appointment booked successfully." });
             }
             catch (KeyNotFoundException ex)
             {
@@ -78,7 +78,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns> Returns a confirmation message indicating successful rescheduling.</returns>
 
-        [HttpPost("move")]
+        [HttpPut("move")]
         [Authorize] // Only logged-in users can move appointments
         public async Task<IActionResult> Move([FromBody] MoveAppointmentDto request)
         {
@@ -102,7 +102,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns> Returns a confirmation message indicating successful cancellation.</returns>
         
-        [HttpPost("{id}/cancel")]
+        [HttpPut("{id}/cancel")]
         [Authorize] // Only logged-in users can cancel appointments
         public async Task<IActionResult> Cancel(int id)
         {
@@ -132,7 +132,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns> Returns a list of appointments for the logged-in patient.</returns>
         
-        [HttpGet("my-appointments")]
+        [HttpGet("myappointments")]
         [Authorize]
         public async Task<IActionResult> GetMyAppointments()
         {

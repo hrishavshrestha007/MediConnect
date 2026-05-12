@@ -1,26 +1,26 @@
 @Clinic_HostAddress = http://localhost:5117
 
 
-GET {{Clinic_HostAddress}}/api/doctor
+GET {{Clinic_HostAddress}}/api/doctors
 Accept: application/json
 
 ###
 
-GET {{Clinic_HostAddress}}/api/doctor/1
+GET {{Clinic_HostAddress}}/api/doctors/1
 Accept: application/json
 
 ###
 
-GET {{Clinic_HostAddress}}/api/doctor/select
+GET {{Clinic_HostAddress}}/api/doctors/select
 Accept: application/json
 
 ### 
-GET {{Clinic_HostAddress}}/api/doctor/search?term=maria
+GET {{Clinic_HostAddress}}/api/doctors/search?term=maria
 Accept: application/json
 
 ###
 
-POST {{Clinic_HostAddress}}/api/doctor
+POST {{Clinic_HostAddress}}/api/doctors
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{Clinic_HostAddress}}/api/doctor/5
+PUT {{Clinic_HostAddress}}/api/doctors/5
 Content-Type: application/json
 
 {
@@ -44,8 +44,7 @@ Content-Type: application/json
 }
 
 ###
-
-DELETE {{Clinic_HostAddress}}/api/doctor/5
+DELETE {{Clinic_HostAddress}}/api/doctors/5
 Accept: application/json
 
 ########### Logins ############
@@ -162,3 +161,9 @@ Authorization: Bearer {{token}}
 ### Cancel appointment (requires auth)
 POST {{Clinic_HostAddress}}/api/appointment/2/cancel
 Authorization: Bearer {{token}}
+
+############ CLINIC ############
+
+### Get all clinics
+GET http://localhost:5000/api/clinics
+Content-Type: application/json

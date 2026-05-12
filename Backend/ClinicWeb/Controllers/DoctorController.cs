@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicWeb.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/doctors")]
     [ApiController]
     public class DoctorController : ControllerBase
     {
@@ -21,21 +21,28 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns> Returns a list of all doctors. 200 OK. </returns>
 
-        //GET api/doctor
+        //GET api/doctors
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var doctors = await _doctorService.GetAllAsync();
-            return Ok(doctors);
+            var doctorDtos = doctors.Select(doctor => new DoctorDto
+            {
+                Id = doctor.Id,
+                FullName = $"Dr. {doctor.FirstName} {doctor.LastName}",
+                SpecialityName = doctor.Speciality?.Name,
+                ClinicName = doctor.Clinic?.Name
+            }).ToList();
+            return Ok(doctorDtos);
         }
 
         /// <summary>
         /// Get a doctor by ID.
-         /// </summary>
-         /// <param name="id"></param>
-         /// <returns> Returns the doctor with the specified ID. 200 OK. </returns>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> Returns the doctor with the specified ID. 200 OK. </returns>
 
-        //GET api/doctor/{id}
+        //GET api/doctors/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -47,7 +54,7 @@ namespace ClinicWeb.Controllers
                     Id = doctor.Id,
                     FullName = $"Dr. {doctor.FirstName} {doctor.LastName}",
                     SpecialityName = doctor.Speciality?.Name,
-                    ClinicName = doctor.ClinicId.ToString()
+                    ClinicName = doctor.Clinic?.Name
                 };
                 return Ok(doctorDto);
             }
@@ -58,25 +65,12 @@ namespace ClinicWeb.Controllers
         }
 
         /// <summary>
-        /// Get all doctors for select dropdowns. Returns only ID and full name.
-        /// </summary>
-        /// <returns> Returns a list of doctors for select dropdowns. 200 OK. </returns>
-
-        //GET api/doctor/select
-        [HttpGet("select")]
-        public async Task<IActionResult> GetSelect()
-        {
-            var doctors = await _doctorService.GetAllForSelectAsync();
-            return Ok(doctors);
-        }
-
-        /// <summary>
         /// Search for doctors by name, speciality, or clinic. The search term is passed as a query parameter.
         /// </summary>
         /// <param name="term"></param>
         /// <returns> Returns a list of doctors matching the search criteria. 200 OK. </returns>
 
-        //Get api/doctor/search?term={searchTerm}
+        //Get api/doctors/search?term={searchTerm}
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string term)
         {
@@ -101,7 +95,7 @@ namespace ClinicWeb.Controllers
         /// <param name="NewDoctor"></param>
         /// <returns> Returns the created doctor. 201 Created. </returns>
 
-        //POST api/doctor
+        //POST api/doctors
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Doctor NewDoctor)
         {
@@ -124,7 +118,7 @@ namespace ClinicWeb.Controllers
         /// <param name="updatedDoctor"></param>
         /// <returns> Returns the updated doctor. 200 OK. </returns>
 
-        //PUT api/doctor/{id}
+        //PUT api/doctors/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Doctor updatedDoctor)
         {
@@ -150,7 +144,7 @@ namespace ClinicWeb.Controllers
         /// <param name="id"></param>
         /// <returns> Returns a confirmation message. 200 OK. </returns>
 
-        //DELETE api/doctor/{id}
+        //DELETE api/doctors/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -169,5 +163,5 @@ namespace ClinicWeb.Controllers
                 return Conflict(new { message = ex.Message });
             }
         }
-    } 
+    }
 }

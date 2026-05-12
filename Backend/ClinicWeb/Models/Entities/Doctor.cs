@@ -14,6 +14,7 @@ namespace ClinicWeb.Models.Entities
 
         // Navigation
         public Speciality? Speciality { get; set; }
+        [JsonIgnore]
         public Clinic? Clinic { get; set; }
         [JsonIgnore]
         public List<Appointment>? Appointments { get; set; }

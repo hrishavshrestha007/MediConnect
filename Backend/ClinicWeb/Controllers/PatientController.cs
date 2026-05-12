@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicWeb.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/patients")]
     [ApiController]
     public class PatientController : ControllerBase
     {
@@ -20,6 +20,7 @@ namespace ClinicWeb.Controllers
         /// Get all patients. Requires authentication.
         /// </summary>
         /// <returns>A list of all patients.</returns>
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAll()
@@ -35,6 +36,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <param name="id">The ID of the patient to retrieve.</param>
         /// <returns>The patient with the specified ID.</returns>
+        
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetById(int id)
@@ -54,6 +56,7 @@ namespace ClinicWeb.Controllers
         /// Get all registered patients. Requires authentication.
         /// </summary>
         /// <returns>A list of all registered patients.</returns>
+        
         [HttpGet("registered")]
         [Authorize]
         public async Task<IActionResult> GetRegisteredPatients()
@@ -69,6 +72,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <param name="request">The registration request containing patient information.</param>
         /// <returns>A confirmation message indicating successful registration.</returns>
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] RegisterRequestDto request)
         {
@@ -83,7 +87,7 @@ namespace ClinicWeb.Controllers
             try
             {
                 await _patientService.RegisterAsync(request);
-                return Ok(new { message = "Patient registered successfully." });
+                return CreatedAtAction(nameof(Create), new { message = "Patient registered successfully." });
             }
             catch (InvalidOperationException ex)
             {
@@ -100,6 +104,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns>A confirmation message indicating successful update.</returns>
         //PUT api/patient/{id}
+        
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> Update(int id, [FromBody] Patient updatedPatient)
@@ -128,6 +133,7 @@ namespace ClinicWeb.Controllers
         /// </summary>
         /// <returns>A confirmation message indicating successful deletion.</returns>
         //DELETE api/patient/{id}
+        
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
@@ -135,7 +141,7 @@ namespace ClinicWeb.Controllers
             try
             {
                 await _patientService.DeleteAsync(id);
-                return Ok(new { message = "Patient deleted successfully." });
+                return NoContent();
             }
             catch (Exception)
             {
