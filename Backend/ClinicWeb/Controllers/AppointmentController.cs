@@ -26,7 +26,7 @@ namespace ClinicWeb.Controllers
         /// Book an appointment. If the user is logged in, the appointment will be associated with their account. If the user is a guest, a new patient record will be created for them and the appointment will be associated with that record.
         /// </summary>
         /// <returns> Returns a confirmation message indicating successful booking.</returns>
-        
+
         [HttpPost("book")]
         public async Task<IActionResult> Book([FromBody] BookAppointmentRequestDto request)
         {
@@ -36,6 +36,7 @@ namespace ClinicWeb.Controllers
 
                 if (patientId == null)
                 {
+                    // Guest booking
                     if (string.IsNullOrEmpty(request.FirstName) ||
                         string.IsNullOrEmpty(request.LastName) ||
                         string.IsNullOrEmpty(request.Email))
@@ -43,17 +44,27 @@ namespace ClinicWeb.Controllers
                         return BadRequest(new { message = "For guest bookings, firstName, lastName, and email are required." });
                     }
 
-                    var guestPatient = new Patient
+                    // Check if email already exists
+                    var existingPatient = await _patientService.GetByEmailAsync(request.Email);
+                    if (existingPatient != null)
                     {
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        Email = request.Email,
-                        Birthdate = request.Birthdate
-                        // No password for guests
-                    };
+                        // Patient already exists, use their ID
+                        patientId = existingPatient.Id;
+                    }
+                    else
+                    {
+                        // Create new guest patient
+                        var guestPatient = new Patient
+                        {
+                            FirstName = request.FirstName,
+                            LastName = request.LastName,
+                            Email = request.Email,
+                            Birthdate = request.Birthdate
+                        };
 
-                    await _patientService.CreateAsync(guestPatient);
-                    patientId = guestPatient.Id;
+                        await _patientService.CreateAsync(guestPatient);
+                        patientId = guestPatient.Id;
+                    }
                 }
 
                 await _appointmentService.BookAsync(request, patientId);
@@ -101,12 +112,13 @@ namespace ClinicWeb.Controllers
         /// Cancel an appointment. Only the patient who booked the appointment can cancel it, and they must be logged in to do so.
         /// </summary>
         /// <returns> Returns a confirmation message indicating successful cancellation.</returns>
-        
+
         [HttpPut("{id}/cancel")]
         [Authorize] // Only logged-in users can cancel appointments
         public async Task<IActionResult> Cancel(int id)
         {
             var patientId = GetPatientId();
+            Console.WriteLine($"Canceling appointment {id} for patient {patientId}");
             if (patientId == null)
                 return Unauthorized(new { message = "You must be logged in to cancel an appointment." });
 
@@ -115,7 +127,8 @@ namespace ClinicWeb.Controllers
             try
             {
                 await _appointmentService.CancelAsync(patientId.Value, request);
-                return Ok(new { message = "Appointment cancelled successfully." });
+                return Ok(new { message = "Appointment cancelled successfully.", 
+                });
             }
             catch (KeyNotFoundException ex)
             {
@@ -125,13 +138,14 @@ namespace ClinicWeb.Controllers
             {
                 return Conflict(new { message = ex.Message });
             }
+
         }
 
         /// <summary>
         /// Get all appointments for the logged-in patient.
         /// </summary>
         /// <returns> Returns a list of appointments for the logged-in patient.</returns>
-        
+
         [HttpGet("myappointments")]
         [Authorize]
         public async Task<IActionResult> GetMyAppointments()

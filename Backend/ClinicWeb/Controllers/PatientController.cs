@@ -41,16 +41,39 @@ namespace ClinicWeb.Controllers
         [Authorize]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var patient = await _patientService.GetByIdAsync(id);
-                return Ok(patient);
-            }
-            catch (Exception)
-            {
-                return NotFound("Patient not found.");
-            }
-        }
+            var nameidClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+    if (nameidClaim == null || !int.TryParse(nameidClaim.Value, out int userId))
+        return Unauthorized();
+
+    // Only allow users to view their own profile
+    if (userId != id)
+        return Forbid();
+
+    try
+    {
+        var patient = await _patientService.GetByIdAsync(id);
+
+        // Return as anonymous object with all fields
+        return Ok(new
+        {
+            patient.Id,
+            patient.FirstName,
+            patient.LastName,
+            patient.Email,
+            patient.SocialSecurityNumber,
+            patient.Birthdate,
+            patient.Gender,
+            patient.TaxNumber,
+            patient.Religion,
+            patient.DriverLicenseNumber,
+            patient.MedicalInsuranceMemberId
+        });
+    }
+    catch (KeyNotFoundException)
+    {
+        return NotFound();
+    }
+}
 
         /// <summary>
         /// Get all registered patients. Requires authentication.

@@ -49,8 +49,7 @@ Accept: application/json
 
 ########### Logins ############
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMDUiLCJzdWIiOiJzYW0ubWFsb25AZXhhbXBsZS5jb20iLCJqdGkiOiJkNDA0OWEwMy05OWE4LTRiYjItOTljNi1kOGNmYTExMWQzNWMiLCJleHAiOjE3NzgxMTY0MTMsImlzcyI6Ik1lZGlDb25uZWN0IiwiYXVkIjoiTWVkaUNvbm5lY3RVc2VycyJ9.YskKFSk7toZ87N0LJ0SlAQ_b5ZgXVrwlDdfl2cFOG2E
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMDUiLCJzdWIiOiJzYW0ubWFsb25AZXhhbXBsZS5jb20iLCJqdGkiOiJmNDE2NmZhMC0xYmNhLTQ2NTctYmZiMS1iOTU0NmVlYjgzZjAiLCJleHAiOjE3Nzg3OTkzMTAsImlzcyI6Ik1lZGlDb25uZWN0IiwiYXVkIjoiTWVkaUNvbm5lY3RVc2VycyJ9.acxgQYb3Pzn0GEukJZUE13V3zYdZZNQE2CV44y9ZjxM
 POST {{Clinic_HostAddress}}/api/auth/login
 Content-Type: application/json
 
@@ -72,7 +71,7 @@ Accept: application/json
 Authorization: Bearer {{token}}
 
 ###
-GET {{Clinic_HostAddress}}/api/patient/2
+GET {{Clinic_HostAddress}}/api/patients/1005
 Accept: application/json
 Authorization: Bearer {{token}}
 

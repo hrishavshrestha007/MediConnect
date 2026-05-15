@@ -9,6 +9,12 @@ export interface Doctor {
   specialityId: number;
 }
 
+export interface SearchDoctor {
+  fullName: string;
+  specialityName: string;
+  clinicName: string;
+}
+
 export const getDoctors = async (): Promise<Doctor[]> => {
   const response = await fetch(`${API_URL}/api/doctors`);
   if (!response.ok) {
@@ -24,16 +30,18 @@ export const getDoctors = async (): Promise<Doctor[]> => {
   return [];
 };
 
-export const searchDoctors = async (query: string): Promise<Doctor[]> => {
-  const response = await fetch(`${API_URL}/api/doctors/search?query=${encodeURIComponent(query)}`);
+export const searchDoctors = async (query: string): Promise<SearchDoctor[]> => {
+  const response = await fetch(`${API_URL}/api/doctors/search?term=${encodeURIComponent(query)}`);
+  const data: unknown = await response.json();
   if (!response.ok) {
-    throw new Error('Failed to search doctors');
+    if (data && typeof data === 'object' && 'message' in data) {
+      throw new Error((data as { message: string }).message);
+    }
+    throw new Error(data as string || 'Failed to search doctors');
   }
   
-  const data: unknown = await response.json();
-  
   if (Array.isArray(data)) {
-    return data as Doctor[];
+    return data as SearchDoctor[];
   }
   
   return [];
@@ -56,4 +64,6 @@ export const filterDoctors = async (specialityId?: number, clinicId?: number): P
   }
   
   return [];
-};  
+
+  
+};

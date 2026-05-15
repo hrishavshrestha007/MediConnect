@@ -11,7 +11,6 @@ export default async function Header() {
 
   return (
     <header className="w-full ">
-      {fullName && <p>Welcome, {fullName}!</p>}
       <nav className="flex w-full flex-wrap items-center justify-between gap-4 rounded-xl border border-[#d8cec0] bg-[#f3eee6]/90 px-3 py-2 sm:px-4">
         <Link
           href="/"
@@ -34,14 +33,22 @@ export default async function Header() {
           <Link href="/doctors" className="transition-colors hover:text-[#22201e]">
             Find a Doctor
           </Link>
+          {isLoggedIn && (
+            <Link href="/myappointments" className="transition-colors hover:text-[#22201e]">
+              My Appointments
+            </Link>
+          )}
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
           {isLoggedIn ? (
             <>
-              <span className="max-w-[140px] truncate px-2 text-sm font-medium text-[#5d554d] sm:max-w-[200px]">
+              <Link
+                href="/profile"
+                className="max-w-[140px] truncate px-2 text-sm font-medium text-[#5d554d] sm:max-w-[200px]"
+              >
                 {fullName}
-              </span>
+              </Link>
               <form action={logout} className="inline-block">
                 <button
                   type="submit"

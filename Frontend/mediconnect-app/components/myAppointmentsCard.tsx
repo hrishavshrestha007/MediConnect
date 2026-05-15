@@ -1,4 +1,6 @@
 import { getMyAppointments } from "@/services/appointmentServices";
+import CancelConfirmationModal from "./cancelConfirmationModal";
+import MoveAppointmentModal from "./moveAppointmentModal";
 import Link from "next/link";
 
 export default async function MyAppointmentsPage() {
@@ -22,13 +24,39 @@ export default async function MyAppointmentsPage() {
                     className="flex flex-col rounded-lg border border-[#d8cec0] bg-white p-6 shadow-sm"
                   >
                     <h3 className="text-lg font-semibold text-[#5d554d]">{appointment.doctorName}</h3>
+                    <p className="mt-1 text-sm text-[#8b7d75]">Clinic: {appointment.clinicName}</p>
                     <p className="mt-2 text-sm text-[#5d554d]">
                       {new Date(appointment.appointmentDate).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm text-[#5d554d]">
+                      {new Date(appointment.appointmentDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     <p className="text-sm text-[#5d554d]">{appointment.durationMinutes} minutes</p>
                     <span className="mt-2 inline-block rounded-full bg-[#d98a5a]/20 px-3 py-1 text-xs font-medium text-[#d98a5a]">
                       {appointment.status}
                     </span>
+
+                    {/* Action Buttons */}
+                    {appointment.status !== 'Cancelled' && appointment.status !== 'Completed' && (
+                      <div className="mt-4 flex gap-2">
+                        <MoveAppointmentModal
+                          appointmentId={appointment.id}
+                          doctorName={appointment.doctorName}
+                          clinicName={appointment.clinicName}
+                          currentDate={appointment.appointmentDate}
+                          durationMinutes={appointment.durationMinutes}
+                        />
+
+                        <div className="flex-1">
+                          <CancelConfirmationModal
+                            appointmentId={appointment.id}
+                            doctorName={appointment.doctorName}
+                            appointmentDate={appointment.appointmentDate}
+                            clinicName={appointment.clinicName}
+                          />
+                      </div>
+                    </div>
+                    )}
                   </div>
                 ))}
               </div>

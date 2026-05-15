@@ -1,17 +1,42 @@
-'use server';
+'use client';
 
+import { useState } from 'react';
 import { bookAppointment } from "@/modules/appointments/actions";
-import { getDoctors } from "@/services/doctorServices";
-import { getClinics } from "@/services/clinicServices";
-import { getCategories } from "@/services/categoryServices";
-import DoctorDropdown from "./doctorDropdown";
-import ClinicDropdown from "./clinicDropdown";
+import { Clinic } from "@/services/clinicServices";
 import CategoryDropdown from "./categoryDropdown";
 
-export default async function BookAppointmentForm() {
-  const doctors = await getDoctors();
-  const clinics = await getClinics();
-  const categories = await getCategories();
+interface Category {
+  id: number;
+  name: string;
+}
+
+export default function BookAppointmentFormClient({
+  clinics,
+  categories,
+  isLoggedIn,
+  firstName,
+  lastName,
+  email,
+}: {
+  clinics: Clinic[];
+  categories: Category[];
+  isLoggedIn: boolean;
+  firstName: string;
+  lastName: string;
+  email: string;
+}) {
+  const [selectedClinicId, setSelectedClinicId] = useState<number | null>(null);
+
+  // Extract all doctors from clinics
+  const allDoctors = clinics.flatMap(clinic => clinic.doctors);
+
+  // Filter doctors by selected clinic
+  const filteredDoctors = selectedClinicId
+    ? allDoctors.filter(doc => doc.clinicId === selectedClinicId)
+    : [];
+
+  // Get doctor's full name
+  const getDoctorFullName = (doctor: any) => `${doctor.firstName} ${doctor.lastName}`;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#f3eee6]">
@@ -19,8 +44,47 @@ export default async function BookAppointmentForm() {
         <h2 className="text-2xl font-bold text-[#5d554d] mb-6">Book an Appointment</h2>
         
         <form action={bookAppointment} className="space-y-6">
-          <DoctorDropdown doctors={doctors} />
-          <ClinicDropdown clinics={clinics} />
+          <div>
+            <label className="block text-sm font-medium text-[#22201e] mb-2">Clinic</label>
+            <select
+              name="clinicId"
+              value={selectedClinicId || ''}
+              onChange={(e) => setSelectedClinicId(Number(e.target.value))}
+              required
+              className="w-full px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20"
+            >
+              <option value="">Select a clinic</option>
+              {clinics.map((clinic) => (
+                <option key={clinic.id} value={clinic.id}>
+                  {clinic.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#22201e] mb-2">Doctor</label>
+            <select
+              name="doctorId"
+              disabled={!selectedClinicId || filteredDoctors.length === 0}
+              required
+              className="w-full px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="">
+                {selectedClinicId ? (
+                  filteredDoctors.length > 0 ? 'Select a doctor' : 'No doctors available'
+                ) : (
+                  'Select a clinic first'
+                )}
+              </option>
+              {filteredDoctors.map((doctor) => (
+                <option key={doctor.id} value={doctor.id}>
+                  {getDoctorFullName(doctor)}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <CategoryDropdown categories={categories} />
           
           <div className="grid grid-cols-2 gap-4">
@@ -68,53 +132,63 @@ export default async function BookAppointmentForm() {
             />
           </div>
 
-          <div className="border-t border-[#d8cec0] pt-6">
-            <h3 className="text-lg font-semibold text-[#22201e] mb-4">Patient Information</h3>
-            
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-[#22201e]">First Name</label>
+          {isLoggedIn && (
+            <>
+              <input type="hidden" name="firstName" value={firstName} />
+              <input type="hidden" name="lastName" value={lastName} />
+              <input type="hidden" name="email" value={email} />
+            </>
+          )}
+
+          {!isLoggedIn && (
+            <div className="border-t border-[#d8cec0] pt-6">
+              <h3 className="text-lg font-semibold text-[#22201e] mb-4">Patient Information</h3>
+              
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#22201e]">First Name</label>
+                  <input 
+                    type="text" 
+                    name="firstName"
+                    required
+                    className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
+                    placeholder="John" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#22201e]">Last Name</label>
+                  <input 
+                    type="text" 
+                    name="lastName"
+                    required
+                    className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
+                    placeholder="Doe" 
+                  />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-[#22201e]">Email</label>
                 <input 
-                  type="text" 
-                  name="firstName"
+                  type="email" 
+                  name="email"
                   required
                   className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
-                  placeholder="John" 
+                  placeholder="name@example.com" 
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-[#22201e]">Last Name</label>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-[#22201e]">Date of Birth</label>
                 <input 
-                  type="text" 
-                  name="lastName"
+                  type="date" 
+                  name="birthdate"
                   required
                   className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
-                  placeholder="Doe" 
                 />
               </div>
             </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-[#22201e]">Email</label>
-              <input 
-                type="email" 
-                name="email"
-                required
-                className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
-                placeholder="john@example.com" 
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-[#22201e]">Date of Birth</label>
-              <input 
-                type="date" 
-                name="birthdate"
-                required
-                className="w-full mt-2 px-3 py-2 border border-[#d8cec0] rounded-lg text-[#22201e] focus:outline-none focus:ring-2 focus:ring-[#8b7e6a]/20" 
-              />
-            </div>
-          </div>
+          )}
 
           <button 
             type="submit"

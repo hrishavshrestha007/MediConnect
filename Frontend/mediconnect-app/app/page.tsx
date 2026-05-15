@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  const isLoggedIn = !!token;
+
   return (
     <main className="w-full bg-[#f3eee6] text-[#212121]">
       <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-10">
@@ -33,6 +38,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+
         <section className="flex items-center justify-center py-16">
           <div className="w-full">
             <div className="mb-12 text-center">
@@ -44,17 +50,17 @@ export default function Home() {
                 <h3 className="font-serif text-xl font-semibold text-[#22201e]">3 Clinics</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Multiple convenient locations across the city</p>
               </Link>
-              <Link href="/doctors" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
+              <Link href="/specialists" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
                 <div className="mb-4 text-5xl">👨‍⚕️</div>
                 <h3 className="font-serif text-xl font-semibold text-[#22201e]">9 Specialists</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Board-certified doctors across all specialties</p>
               </Link>
-              <Link href="/book" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
+              <Link href="/bookappointment" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
                 <div className="mb-4 text-5xl">📅</div>
                 <h3 className="font-serif text-xl font-semibold text-[#22201e]">Easy Booking</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Book as a guest or registered patient in minutes</p>
               </Link>
-              <Link href="/about" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
+              <Link href={isLoggedIn ? "/myappointments" : "/login"} className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
                 <div className="mb-4 text-5xl">🔒</div>
                 <h3 className="font-serif text-xl font-semibold text-[#22201e]">Secure & Private</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Your medical data is always safe with us</p>

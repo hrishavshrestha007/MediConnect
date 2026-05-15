@@ -12,5 +12,6 @@ namespace ClinicWeb.Services.Appointments
         Task BookAsync(BookAppointmentRequestDto request, int? patientId = null);
 
         Task<IEnumerable<ViewAppointmentDto>> GetPatientAppointmentsAsync(int patientId);
+
     }
 }
