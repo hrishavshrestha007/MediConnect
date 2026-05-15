@@ -103,9 +103,7 @@ export async function moveAppointment(formData: FormData) {
             throw new Error('Please select a new date and time');
         }
 
-        const [hours, minutes] = newTime.split(':');
-        const appointmentDateTime = new Date(`${newDate}T${hours}:${minutes}:00`);;
-        const isoDateTime = appointmentDateTime.toISOString();
+        const isoDateTime = `${newDate}T${newTime}:00`;
 
         const response = await fetch(`${API_URL}/api/appointment/move`, {
             method: 'PUT',
