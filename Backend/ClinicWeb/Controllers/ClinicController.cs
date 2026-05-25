@@ -7,13 +7,14 @@ using ClinicWeb.Services.Clinics;
 
 namespace ClinicWeb.Controllers
 {
-    [Route("api/clinics")]
+    [Route("api/clinics")] // route for clinics
+    [ApiController] // api controller
     public class ClinicController : ControllerBase
     {
-        private readonly IClinicService _clinicService;
-        public ClinicController(IClinicService _clinicService)
+        private readonly IClinicService _clinicService; // service for clinics
+        public ClinicController(IClinicService _clinicService) // constructor for clinics
         {
-            this._clinicService = _clinicService;
+            this._clinicService = _clinicService; // initialize clinic service
         }
 
         /// <summary>
@@ -23,12 +24,12 @@ namespace ClinicWeb.Controllers
 
         //GET api/clinics
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Clinic>>> GetAllClinics()
+        public async Task<ActionResult<IEnumerable<Clinic>>> GetAllClinics() // get all clinics
         {
-            var clinics = await _clinicService.GetAllAsync();
-            if (clinics == null || !clinics.Any())
-                return NotFound("No clinics found.");
-            return Ok(clinics);
+            var clinics = await _clinicService.GetAllAsync(); // get all clinics from service
+            if (clinics == null || !clinics.Any()) // if no clinics found
+                return NotFound("No clinics found."); // return not found
+            return Ok(clinics); // return ok with clinics
         }
 
         /// <summary>
@@ -38,17 +39,17 @@ namespace ClinicWeb.Controllers
         /// <returns></returns>
 
         //GET api/clinic/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Clinic>> GetClinicById(int id)
+        [HttpGet("{id}")] // get clinic by id
+        public async Task<ActionResult<Clinic>> GetClinicById(int id) // get clinic by id
         {
             try
             {
-                var clinic = await _clinicService.GetByIdAsync(id);
-                return Ok(clinic);
+                var clinic = await _clinicService.GetByIdAsync(id); // get clinic by id from service
+                return Ok(clinic); // return ok with clinic
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException ex) // if clinic not found
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(new { message = ex.Message }); // return not found with message
             }
         }
 
@@ -59,17 +60,17 @@ namespace ClinicWeb.Controllers
         /// <returns></returns>
 
         //GET api/clinic/{id}/doctors
-        [HttpGet("{id}/doctors")]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorsByClinicId(int id)
+        [HttpGet("{id}/doctors")] // get doctors by clinic id
+        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctorsByClinicId(int id) // get doctors by clinic id
         {
             try
             {
-                var doctors = await _clinicService.GetDoctorsByClinicId(id);
-                return Ok(doctors);
+                var doctors = await _clinicService.GetDoctorsByClinicId(id); // get doctors by clinic id from service
+                return Ok(doctors); // return ok with doctors
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException ex) // if clinic not found
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(new { message = ex.Message }); // return not found with message
             }
         }
 
@@ -80,17 +81,17 @@ namespace ClinicWeb.Controllers
         /// <returns></returns>
 
         //POST api/clinic
-        [HttpPost]
-        public async Task<ActionResult> CreateClinic([FromBody] Clinic clinic)
+        [HttpPost] // create new clinic
+        public async Task<ActionResult> CreateClinic([FromBody] Clinic clinic) // create new clinic from body
         {
-            try
+            try // try to create clinic
             {
-                await _clinicService.CreateAsync(clinic);
-                return CreatedAtAction(nameof(GetClinicById), new { id = clinic.Id }, clinic);
+                await _clinicService.CreateAsync(clinic); // create clinic from service
+                return CreatedAtAction(nameof(GetClinicById), new { id = clinic.Id }, clinic); // return created at action with clinic
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) // if clinic already exists
             {
-                return Conflict(new { message = ex.Message });
+                return Conflict(new { message = ex.Message }); // return conflict with message
             }
         }
 
@@ -102,30 +103,30 @@ namespace ClinicWeb.Controllers
         /// <returns> Returns 204 update successful. </returns>
 
         //PUT api/clinic/{id}
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateClinic(int id, [FromBody] Clinic updatedClinic)
+        [HttpPut("{id}")] // update clinic by id
+        public async Task<ActionResult> UpdateClinic(int id, [FromBody] Clinic updatedClinic) // update clinic by id from body
         {
             try
             {
                 // Validate FIRST (before updating)
-                if (id != updatedClinic.Id)
+                if (id != updatedClinic.Id) // if id in url does not match id in body
                 {
-                    return BadRequest(new { message = "ID in the URL does not match ID in the body." });
+                    return BadRequest(new { message = "ID in the URL does not match ID in the body." }); // return bad request with message
                 }
 
                 // Then update
-                await _clinicService.UpdateAsync(id, updatedClinic);
+                await _clinicService.UpdateAsync(id, updatedClinic); // update clinic from service
 
                 // Return either:
                 return NoContent(); 
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException ex) // if clinic not found
             {
-                return NotFound(new { message = ex.Message });
+                return NotFound(new { message = ex.Message }); // return not found with message
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) // if clinic already exists
             {
-                return Conflict(new { message = ex.Message });
+                return Conflict(new { message = ex.Message }); // return conflict with message
             }
         }
 
@@ -136,21 +137,21 @@ namespace ClinicWeb.Controllers
         /// <returns> Returns 204 No Content on successfully deleted. </returns>
 
         //DELETE api/clinic/{id}
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteClinic(int id)
+        [HttpDelete("{id}")] // delete clinic by id
+        public async Task<ActionResult> DeleteClinic(int id) // delete clinic by id
         {
             try
             {
-                await _clinicService.DeleteAsync(id);
-                if (id <= 0)
+                await _clinicService.DeleteAsync(id); // delete clinic from service
+                if (id <= 0) // if id is invalid
                 {
-                    return BadRequest(new { message = "Invalid clinic ID." });
+                    return BadRequest(new { message = "Invalid clinic ID." }); // return bad request with message
                 }
-                return NoContent();
+                return NoContent(); // return no content on successfully deleted
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) // if clinic has associated doctors or appointments
             {
-                return Conflict(new { message = ex.Message });
+                return Conflict(new { message = ex.Message }); // return conflict with message
             }
         }
     }

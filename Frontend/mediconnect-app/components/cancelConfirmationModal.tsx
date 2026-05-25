@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { cancelAppointment } from "@/modules/appointments/actions";
+import { toast } from "sonner";
 
 interface CancelConfirmationModalProps {
   appointmentId: number;
@@ -23,7 +24,6 @@ export default function CancelConfirmationModal({
 
   const handleCancel = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
 
     try {
@@ -31,24 +31,28 @@ export default function CancelConfirmationModal({
       formData.append('appointmentId', appointmentId.toString());
       await cancelAppointment(formData);
       
-      // Show success message
-      setIsSuccess(true);
+      // Show success toast
+      toast.success('Appointment cancelled successfully!', {
+        description: 'Reloading your appointments...',
+      });
       
-      // Close modal after 2 seconds
+      // Close modal after 1.5 seconds
       setTimeout(() => {
         setIsOpen(false);
-        setIsSuccess(false);
-      }, 2000);
+      }, 1500);
     } catch (err: any) {
+      // Handle redirect as success
       if (err?.message?.includes('redirect') || err?.digest?.includes('NEXT_REDIRECT')) {
-        setIsSuccess(true);
+        toast.success('Appointment cancelled successfully!', );
         setTimeout(() => {
           setIsOpen(false);
-          setIsSuccess(false);
-        }, 2000);
+        }, 1500);
         return;
       }
-      setError(err?.message || 'Failed to cancel appointment');
+      // Show error toast
+      toast.error('Failed to cancel appointment', {
+        description: err?.message || 'Please try again',
+      });
     } finally {
       setIsLoading(false);
     }

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { bookAppointment } from "@/modules/appointments/actions";
 import { Clinic } from "@/services/clinicServices";
 import CategoryDropdown from "./categoryDropdown";
+import { toast } from "sonner";
 
 interface Category {
   id: number;
@@ -26,6 +27,7 @@ export default function BookAppointmentFormClient({
   email: string;
 }) {
   const [selectedClinicId, setSelectedClinicId] = useState<number | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   // Extract all doctors from clinics
   const allDoctors = clinics.flatMap(clinic => clinic.doctors);
@@ -38,12 +40,39 @@ export default function BookAppointmentFormClient({
   // Get doctor's full name
   const getDoctorFullName = (doctor: any) => `${doctor.firstName} ${doctor.lastName}`;
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.currentTarget);
+  
+  startTransition(async () => {
+    try {
+      await bookAppointment(formData);
+      // Show success toast immediately
+      toast.success('Appointment booked successfully!', {
+        description: 'Redirecting to your appointments...',
+      });
+    } catch (error) {
+      // Ignore redirect errors - they mean success
+      if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+        toast.success('Appointment booked successfully!', {
+          description: 'Redirecting to your appointments...',
+        });
+        return;
+      }
+      toast.error('Failed to book appointment', {
+        description: error instanceof Error ? error.message : 'Please try again',
+      });
+    }
+  });
+};
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#f3eee6]">
       <div className="w-full max-w-2xl rounded-3xl border border-white/70 bg-white/80 p-8 shadow-[0_18px_50px_rgba(15,23,42,0.12)] backdrop-blur-xl mx-4">
         <h2 className="text-2xl font-bold text-[#5d554d] mb-6">Book an Appointment</h2>
         
-        <form action={bookAppointment} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-[#22201e] mb-2">Clinic</label>
             <select
@@ -192,9 +221,10 @@ export default function BookAppointmentFormClient({
 
           <button 
             type="submit"
-            className="w-full bg-[#d98a5a] text-white py-3 rounded-md font-semibold hover:bg-[#c97948] transition-colors mt-6"
+            disabled={isPending}
+            className="w-full bg-[#d98a5a] text-white py-3 rounded-md font-semibold hover:bg-[#c97948] transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Book Appointment
+            {isPending ? 'Booking...' : 'Book Appointment'}
           </button>
         </form>
       </div>

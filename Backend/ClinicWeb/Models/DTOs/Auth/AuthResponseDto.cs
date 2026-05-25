@@ -7,5 +7,6 @@ namespace ClinicWeb.Models.DTOs.Auth
         public string? Token { get; set; }
         public string? Email { get; set; }
         public string? FullName { get; set; }
+        public int PatientId { get; set; }
     }
 }

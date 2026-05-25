@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
     
     if (!res.ok) throw new Error('Invalid credentials')
 
-    const { token, fullName } = await res.json()
+    const { token, fullName, patientId } = await res.json()
 
     const cookieStore = await cookies()
     cookieStore.set('token', token, {
@@ -35,6 +35,11 @@ export async function login(formData: FormData) {
     })
 
     cookieStore.set('fullName', fullName as string, { 
+        httpOnly: true,
+        path: '/',
+    })
+
+    cookieStore.set('patientId', patientId.toString(), {
         httpOnly: true,
         path: '/',
     })
@@ -61,5 +66,6 @@ export async function logout() {
     cookieStore.delete('token')
     cookieStore.delete('email')
     cookieStore.delete('fullName')
+    cookieStore.delete('patientId')
     redirect('/login')
 }

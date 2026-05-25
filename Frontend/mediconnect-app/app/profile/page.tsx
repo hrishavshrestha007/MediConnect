@@ -31,12 +31,8 @@ export default async function ProfilePage() {
           <div className="rounded-lg border border-[#d8cec0] bg-white p-6 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <p className="text-xs font-medium text-[#8b7d75]">FIRST NAME</p>
-                <p className="mt-1 text-sm text-[#5d554d]">{patient.firstName}</p>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-[#8b7d75]">LAST NAME</p>
-                <p className="mt-1 text-sm text-[#5d554d]">{patient.lastName}</p>
+                <p className="text-xs font-medium text-[#8b7d75]">FULL NAME</p>
+                <p className="mt-1 text-sm text-[#5d554d]">{patient.firstName} {patient.lastName}</p>
               </div>
               <div className="md:col-span-2">
                 <p className="text-xs font-medium text-[#8b7d75]">EMAIL</p>

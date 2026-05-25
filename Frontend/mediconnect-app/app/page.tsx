@@ -47,12 +47,12 @@ export default async function Home() {
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               <Link href="/clinics" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
                 <div className="mb-4 text-5xl">🏥</div>
-                <h3 className="font-serif text-xl font-semibold text-[#22201e]">3 Clinics</h3>
+                <h3 className="font-serif text-xl font-semibold text-[#22201e]">Clinics</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Multiple convenient locations across the city</p>
               </Link>
               <Link href="/specialists" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">
                 <div className="mb-4 text-5xl">👨‍⚕️</div>
-                <h3 className="font-serif text-xl font-semibold text-[#22201e]">9 Specialists</h3>
+                <h3 className="font-serif text-xl font-semibold text-[#22201e]">Specialists</h3>
                 <p className="mt-2 text-sm leading-6 text-[#5d554d]">Board-certified doctors across all specialties</p>
               </Link>
               <Link href="/bookappointment" className="rounded-lg border border-[#d8cec0] bg-white p-8 text-center shadow-sm transition-all hover:shadow-md hover:bg-[#f9f7f3] cursor-pointer">

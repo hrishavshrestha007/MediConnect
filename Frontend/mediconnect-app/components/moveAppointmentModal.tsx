@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { moveAppointment } from "@/modules/appointments/actions";
+import { toast } from "sonner";
 
 interface MoveAppointmentModalProps {
   appointmentId: number;
@@ -25,30 +26,49 @@ export default function MoveAppointmentModal({
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    if (!newDate || !newTime) {
-      setError('Please select both date and time');
+  e.preventDefault();
+  
+  if (!newDate || !newTime) {
+    setError('Please select both date and time');
+    return;
+  }
+
+  setIsLoading(true);
+  try {
+    const formData = new FormData();
+    formData.append('appointmentId', appointmentId.toString());
+    formData.append('newDate', newDate);
+    formData.append('newTime', newTime);
+    await moveAppointment(formData);
+    toast.success('Appointment rescheduled successfully!', {
+      description: 'Reloading your appointments...',
+    });
+    // Close modal after showing success
+    setTimeout(() => {
+      setIsOpen(false);
+      setNewDate('');
+      setNewTime('');
+      setError('');
+    }, 800);
+  } catch (err: any) {
+    if (err?.message?.includes('redirect') || err?.digest?.includes('NEXT_REDIRECT')) {
+      toast.success('Appointment rescheduled successfully!', {
+        description: 'Reloading your appointments...',
+      });
+      setTimeout(() => {
+        setIsOpen(false);
+        setNewDate('');
+        setNewTime('');
+        setError('');
+      }, 800);
       return;
     }
-
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append('appointmentId', appointmentId.toString());
-      formData.append('newDate', newDate);
-      formData.append('newTime', newTime);
-      await moveAppointment(formData);
-    } catch (err: any) {
-      if (err?.message?.includes('redirect') || err?.digest?.includes('NEXT_REDIRECT')) {
-        return;
-      }
-      console.error('Error rescheduling appointment:', err);
-      setError(err?.message || 'Failed to reschedule appointment. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    console.error('Error rescheduling appointment:', err);
+    setError(err?.message || 'Failed to reschedule appointment. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <>
