@@ -40,8 +40,8 @@ export default function MoveAppointmentModal({
     formData.append('newDate', newDate);
     formData.append('newTime', newTime);
     await moveAppointment(formData);
-    toast.success('Appointment rescheduled successfully!', {
-      description: 'Reloading your appointments...',
+    toast.success('Appointment rescheduled', {
+      description: 'Successfull!',
     });
     // Close modal after showing success
     setTimeout(() => {
@@ -52,8 +52,8 @@ export default function MoveAppointmentModal({
     }, 800);
   } catch (err: any) {
     if (err?.message?.includes('redirect') || err?.digest?.includes('NEXT_REDIRECT')) {
-      toast.success('Appointment rescheduled successfully!', {
-        description: 'Reloading your appointments...',
+      toast.success('Appointment rescheduled', {
+        description: 'Successfull!',
       });
       setTimeout(() => {
         setIsOpen(false);

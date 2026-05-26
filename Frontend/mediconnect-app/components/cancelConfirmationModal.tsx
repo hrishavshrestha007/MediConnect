@@ -32,8 +32,8 @@ export default function CancelConfirmationModal({
       await cancelAppointment(formData);
       
       // Show success toast
-      toast.success('Appointment cancelled successfully!', {
-        description: 'Reloading your appointments...',
+      toast.success('Appointment cancelled successfully!',{
+        description: 'Successfull!',
       });
       
       // Close modal after 1.5 seconds
@@ -43,7 +43,9 @@ export default function CancelConfirmationModal({
     } catch (err: any) {
       // Handle redirect as success
       if (err?.message?.includes('redirect') || err?.digest?.includes('NEXT_REDIRECT')) {
-        toast.success('Appointment cancelled successfully!', );
+        toast.success('Appointment cancelled successfully!',{
+        description: 'Successfull!',
+      });
         setTimeout(() => {
           setIsOpen(false);
         }, 1500);

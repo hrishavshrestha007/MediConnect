@@ -5,7 +5,7 @@
 
 ---
 
-## PAGES & FEATURES
+## Endpoints
 
 ### Authentication Pages
 
@@ -195,36 +195,36 @@
 ## Features Summary
 
 ### User Management
-- ✅ User registration and login
-- ✅ Profile viewing and editing
-- ✅ JWT token-based authentication
+- User registration and login
+- Profile viewing and editing
+- JWT token-based authentication
 
 ### Appointment Booking
-- ✅ Book appointment as logged-in user or guest
-- ✅ Select clinic, doctor, date, time, and category
-- ✅ Appointment confirmation with details
-- ✅ View all personal appointments
+- Book appointment as logged-in user or guest
+- Select clinic, doctor, date, time, and category
+- Appointment confirmation with details
+- View all personal appointments
 
 ### Appointment Management
-- ✅ View upcoming and past appointments
-- ✅ Cancel appointments with confirmation
-- ✅ Reschedule appointments to new date/time
-- ✅ Appointment status tracking
+- View upcoming and past appointments
+- Cancel appointments with confirmation
+- Reschedule appointments to new date/time
+- Appointment status tracking
 
 ### Search & Browse
-- ✅ Search doctors by name, specialty, or clinic
-- ✅ Browse all clinics
-- ✅ Browse all doctors
-- ✅ Browse by medical specialty
-- ✅ Filter results
+- Search doctors by name, specialty, or clinic
+- Browse all clinics
+- Browse all doctors
+- Browse by medical specialty
+- Filter results
 
 ### User Experience
-- ✅ Responsive design
-- ✅ Form validation
-- ✅ Error handling and user feedback
-- ✅ Loading states
-- ✅ Confirmation modals for critical actions
-- ✅ Success/confirmation cards
+- Responsive design
+- Form validation
+- Error handling and user feedback
+- Loading states
+- Confirmation modals for critical actions
+- Success/confirmation cards
 
 ---
 
@@ -254,3 +254,98 @@ npm run test
 
 # Build for production
 npm run build
+
+---
+
+## Project Structure
+
+```
+mediconnect-app/
+│
+├── app/                                  # Next.js App Router
+│   ├── globals.css                       # Global styles
+│   ├── layout.tsx                        # Root layout with Toaster
+│   ├── page.tsx                          # Home page
+│   ├── login/
+│   │   └── page.tsx                      # Login page
+│   ├── register/
+│   │   ├── page.tsx                      # Registration page
+│   │   ├── error.tsx                     # Register error boundary
+│   │   └── loading.tsx                   # Register loading state
+│   ├── profile/
+│   │   └── page.tsx                      # User profile page
+│   ├── bookappointment/
+│   │   └── page.tsx                      # Appointment booking page
+│   ├── myappointments/
+│   │   └── page.tsx                      # My appointments dashboard
+│   ├── reschedule/
+│   │   └── page.tsx                      # Reschedule appointment page
+│   ├── clinics/
+│   │   └── page.tsx                      # Browse all clinics
+│   ├── doctors/
+│   │   └── page.tsx                      # Browse all doctors
+│   └── specialists/
+│       └── page.tsx                      # Browse by specialty
+│
+├── components/                           # Reusable React components
+│   ├── header.tsx                        # Navigation header
+│   ├── BookAppointmentForm.tsx           # Appointment booking form
+│   ├── cancelConfirmationModal.tsx       # Cancel confirmation modal
+│   ├── moveAppointmentModal.tsx          # Reschedule modal
+│   ├── myAppointmentsCard.tsx            # Appointment card component
+│   ├── clinicDropdown.tsx                # Clinic selector dropdown
+│   ├── doctorDropdown.tsx                # Doctor selector dropdown
+│   ├── categoryDropdown.tsx              # Category selector dropdown
+│   ├── handleDoctorSearch.tsx            # Doctor search handler
+│   ├── confirmationCard.tsx              # Confirmation card display
+│   ├── registerPatients.tsx              # Register cards display
+│   └── searchdoctor.tsx                  # Search bar for finding doctors with real-time results
+│
+├── modules/                              # Feature modules organized by domain
+│   └── auth/
+│       ├── actions.ts                    # Server-side auth operations (login, logout)
+│       └── ...other auth files
+│
+├── services/                             # API service calls
+│   ├── authService.ts                    # Authentication API calls
+│   ├── appointmentService.ts             # Appointment API calls
+│   ├── clinicService.ts                  # Clinic API calls
+│   ├── doctorService.ts                  # Doctor API calls
+│   ├── doctorService.ts                  # Doctor API calls
+│   └── patientService.ts                 # Patient API calls
+│
+├── Libs/                                 # Utility libraries and helpers
+│   └── ...utility functions
+│
+├── public/                               # Static assets
+│   ├── favicon.ico                       # Website favicon
+│   └── ...other static files
+│
+├── _test_/                               # Test files
+│   └── app.test.tsx                      # components test app
+│
+├── package.json                          # Dependencies and scripts
+├── tsconfig.json                         # TypeScript configuration
+├── next.config.ts                        # Next.js configuration
+├── tailwind.config.ts                    # Tailwind CSS configuration
+├── postcss.config.mjs                    # PostCSS configuration
+├── vitest.config.ts                      # Vitest testing configuration
+├── vitest.setup.ts                       # Vitest setup
+├── eslint.config.mjs                     # ESLint configuration
+├── env.local                             # Environment variables (not committed)
+├── next-env.d.ts                         # Next.js type definitions
+├── README.md                             # Project README
+├── AGENTS.md                             # AI agent customization
+├── CLAUDE.md                             # Claude-specific instructions
+└── .gitignore                            # Git ignore rules
+```
+
+### Key Folder Descriptions
+
+- **app/**: Next.js 16 App Router structure with pages and layouts
+- **components/**: Reusable React components for forms, modals, and UI elements
+- **modules/auth/**: Server-side authentication actions (login, logout, session management)
+- **services/**: API client functions for communicating with the backend
+- **Libs/**: Utility functions and helpers used throughout the application
+- **public/**: Static assets like favicon, images, and other media
+- **_test_/**: Unit and integration tests using Vitest

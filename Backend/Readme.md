@@ -222,30 +222,94 @@ Most endpoints marked with **Authorization: Required** need a JWT token in the r
 - **Validation**: Data validation on API endpoints
 - **API Design**: RESTful API with standard HTTP methods
 
-## Setup & Installation
+---
 
+### Backend Setup & Installation
+
+#### Prerequisites
+- **.NET 8.0 SDK** or later
+- **SQL Server** (local or cloud instance)
+- **Visual Studio Code** with C# extension
+
+#### Installation Steps
+
+1. **Create folder Backend**
+   ```bash
+   dotnet new webapi --use-controllers -n ClinicWeb
+
+2. **Install dependencies**
+   ```bash
+   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   dotnet add package Microsoft.EntityFrameworkCore.Design
+   dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer 
+   ```
+
+3. **Configure Database Connection**
+   - Update `appsettings.Development.json` with your SQL Server connection string:
+   ```json
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=your-server;Database=ClinicDb;Trusted_Connection=true;"
+   }
+   ```
+
+4. **Apply Database Migrations**
+   ```bash
+   dotnet ef migrations add IntialCreate
+   dotnet ef database update
+   ```
+
+5. **Run the Application**
+   ```bash
+   dotnet run
+   ```
+   The API will be available at `https://localhost:5001` or `http://localhost:5000`
+
+6. **Access Swagger Documentation**
+   - Navigate to `https://localhost:5117/swagger` to view API documentation and test endpoints
+
+#### Environment Configuration
+- **JWT_SECRET**: Secret key for token generation (configured in `appsettings.json`)
+- **Database Connection**: SQL Server connection string
+- **CORS Origin**: Frontend URL (typically `http://localhost:3000` for development)
+
+---
 
 ## Project Structure
+
+```
 ClinicWeb/
-├── Controllers/              # API endpoints (Auth, Clinic, Doctor, Patient, Appointment)
-├── Services/                 # Business logic layer
-│   ├── Auth/
-│   ├── Clinics/
-│   ├── Doctors/
-│   ├── Patients/
-│   ├── Appointments/
-│   ├── AppointmentCategories/
-│   └── Shared/
+│
+├── Controllers/                          # API endpoints
+│   ├── AuthController.cs                 # Authentication endpoints
+│   ├── ClinicController.cs               # Clinic management
+│   ├── DoctorController.cs               # Doctor management
+│   ├── PatientController.cs              # Patient management
+│   └── AppointmentController.cs          # Appointment management
+│
+├── Services/                             # Business logic layer
+│   ├── Auth/                             # Authentication logic
+│   ├── Clinics/                          # Clinic operations
+│   ├── Doctors/                          # Doctor operations
+│   ├── Patients/                         # Patient operations
+│   ├── Appointments/                     # Appointment operations
+│   ├── AppointmentCategories/            # Category operations
+│   └── Shared/                           # Shared utilities
+│
 ├── Models/
-│   ├── Entities/            # Database entity models
-│   ├── DTOs/                # Data Transfer Objects
-│   └── Config/              # Configuration models
+│   ├── Entities/                         # Database entity models
+│   ├── DTOs/                             # Data Transfer Objects
+│   │   └── Auth/                         # Auth DTOs
+│   └── Config/                           # Configuration models
+│
 ├── Data/
-│   ├── ClinicDbContext.cs   # Entity Framework DbContext
-│   └── Migrations/          # Database migrations
+│   ├── ClinicDbContext.cs                # Entity Framework DbContext
+│   └── Migrations/                       # Database migrations
+│
 ├── Properties/
-│   └── launchSettings.json  # Run configuration
-├── appsettings.json         # Configuration file
-├── appsettings.Development.json
-├── Program.cs               # Application entry point
-└── ClinicWeb.csproj
+│   └── launchSettings.json               # Run configuration
+│
+├── appsettings.json                      # Configuration file
+├── appsettings.Development.json          # Development configuration
+├── Program.cs                            # Application entry point
+└── ClinicWeb.csproj                      # Project file
+```
