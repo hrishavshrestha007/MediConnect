@@ -255,6 +255,8 @@ npm run test
 # Build for production
 npm run build
 
+```
+
 ---
 
 ## Project Structure
