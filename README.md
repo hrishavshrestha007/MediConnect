@@ -285,6 +285,9 @@ This project was built with focus on:
 - Implementing proper separation of concerns (Controllers → Services → Data)
 - Using Entity Framework Core migrations for database management
 - Building scalable API design with DTOs and proper validation
+- Designing a robust three-layer backend architecture (Controllers → Services → Data)
+- Securing endpoints with JWT authentication and authorization
+- Implementing version-controlled database migrations for schema management
 
 ---
 
