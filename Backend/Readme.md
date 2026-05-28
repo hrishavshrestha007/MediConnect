@@ -313,3 +313,28 @@ ClinicWeb/
 ├── Program.cs                            # Application entry point
 └── ClinicWeb.csproj                      # Project file
 ```
+
+### Key Folder Descriptions
+
+- **Controllers/**: Contains API endpoint controllers that handle HTTP requests and responses for authentication, clinic management, doctor management, patient management, and appointments.
+
+- **Services/**: Contains the business logic layer that processes data, handles validation, and manages operations. Organized by domain (Auth, Clinics, Doctors, Patients, Appointments, AppointmentCategories, and Shared utilities).
+
+- **Models/**: Contains all data models including:
+  - **Entities/**: Database entity models that represent tables in SQL Server
+  - **DTOs/**: Data Transfer Objects used to transfer data between API layers
+  - **Config/**: Configuration models for application settings
+
+- **Data/**: Contains Entity Framework Core configuration:
+  - **ClinicDbContext.cs**: The database context that manages database connections and entity mappings
+
+- **Migrations/**: Database migration files that track schema changes over time
+
+- **Properties/**: Contains project configuration files like launch settings for different run profiles
+
+- **Root files**: 
+  - **Program.cs**: Application entry point where the web host is configured
+  - **appsettings.json**: Global configuration file
+  - **appsettings.Development.json**: Development-specific configuration (database connection, JWT secret, etc.)
+  - **ClinicWeb.csproj**: Project file defining dependencies and build configuration
+

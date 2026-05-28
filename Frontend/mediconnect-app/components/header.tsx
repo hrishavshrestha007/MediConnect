@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { logout } from "@/modules/auth/actions";
+import { logout } from "@/modules/auth/actions"; // Import the logout action to handle user logout functionality
 
 export default async function Header() {
   const cookieStore = await cookies();

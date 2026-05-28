@@ -1,10 +1,10 @@
-'use client';
+'use client'; // This component is client-side because it uses useState and useTransition
 
-import { useState, useTransition } from 'react';
-import { bookAppointment } from "@/modules/appointments/actions";
-import { Clinic } from "@/services/clinicServices";
-import CategoryDropdown from "./categoryDropdown";
-import { toast } from "sonner";
+import { useState, useTransition } from 'react'; // Import useTransition for handling async state updates
+import { bookAppointment } from "@/modules/appointments/actions"; // Import the bookAppointment action to handle form submission
+import { Clinic } from "@/services/clinicServices"; // Import Clinic type for typing the clinics prop
+import CategoryDropdown from "./categoryDropdown"; // Import a dropdown component for selecting appointment categories
+import { toast } from "sonner"; // Import toast for showing success/error messages to the user for better user experience
 
 interface Category {
   id: number;
@@ -40,6 +40,7 @@ export default function BookAppointmentFormClient({
   // Get doctor's full name
   const getDoctorFullName = (doctor: any) => `${doctor.firstName} ${doctor.lastName}`;
 
+   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   
@@ -221,10 +222,10 @@ export default function BookAppointmentFormClient({
 
           <button 
             type="submit"
-            disabled={isPending}
+            disabled={isPending} // Disable button while booking to prevent multiple submissions
             className="w-full bg-[#d98a5a] text-white py-3 rounded-md font-semibold hover:bg-[#c97948] transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? 'Booking...' : 'Book Appointment'}
+            {isPending ? 'Booking...' : 'Book Appointment'} // Show loading state while booking
           </button>
         </form>
       </div>
