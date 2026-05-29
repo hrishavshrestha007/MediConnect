@@ -304,9 +304,12 @@ mediconnect-app/
 │   └── searchdoctor.tsx                  # Search bar for finding doctors with real-time results
 │
 ├── modules/                              # Feature modules organized by domain
-│   └── auth/
-│       ├── actions.ts                    # Server-side auth operations (login, logout)
-│       └── ...other auth files
+│   ├── auth/
+│   │   └── actions.ts                    # Server-side auth operations (login, logout)
+│   ├── appointments/
+│   │   └── actions.ts                    # Server-side appointment operations (book, cancel, reschedule)
+│   └── patients/
+│       └── actions.ts                    # Server-side patient operations (profile, registration)
 │
 ├── services/                             # API service calls
 │   ├── authService.ts                    # Authentication API calls
