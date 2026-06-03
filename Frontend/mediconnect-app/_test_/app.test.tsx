@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";  
+import { describe, it,  expect } from "vitest";  
 import BookAppointmentFormClient from "@/components/BookAppointmentForm";
 import CancelConfirmationModal from "@/components/cancelConfirmationModal";
 import MoveAppointmentModal from "@/components/moveAppointmentModal";
@@ -68,19 +68,19 @@ describe("BookAppointmentFormClient", () => {
   })
 
 
-  it("hides patient information when logged in", () => {
-    render(
-      <BookAppointmentFormClient
-        clinics={mockClinics}
-        categories={mockCategories}
-        isLoggedIn={true}
-        firstName="John"
-        lastName="Doe"
-        email="john.doe@example.com"
-      />
-    )
-    expect(screen.queryByText("Patient Information")).not.toBeInTheDocument()
-  })
+  it("render logged-in user to get profile information", () => {
+  render(
+    <BookAppointmentFormClient
+      clinics={mockClinics}
+      categories={mockCategories}
+      isLoggedIn={true}
+      firstName="John"
+      lastName="Doe"
+      email="john.doe@example.com"
+    />
+  )
+  expect(screen.queryByText("Patient Information")).not.toBeInTheDocument()
+})
 
   it("renders book my appointment button", () => {
     render(

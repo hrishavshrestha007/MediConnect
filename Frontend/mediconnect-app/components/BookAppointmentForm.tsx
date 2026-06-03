@@ -222,10 +222,10 @@ export default function BookAppointmentFormClient({
 
           <button 
             type="submit"
-            disabled={isPending} // Disable button while booking to prevent multiple submissions
+            disabled={isPending}
             className="w-full bg-[#d98a5a] text-white py-3 rounded-md font-semibold hover:bg-[#c97948] transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isPending ? 'Booking...' : 'Book Appointment'} // Show loading state while booking
+            {isPending ? 'Booking...' : 'Book Appointment'}
           </button>
         </form>
       </div>
