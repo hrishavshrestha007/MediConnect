@@ -288,7 +288,7 @@ This project was built with focus on:
 ---
 
 ## Author
-Hrishav Shrestha - Noroff School of Technology and Digital Media in Oslo
+Hrishav Shrestha
 
 ---
 
