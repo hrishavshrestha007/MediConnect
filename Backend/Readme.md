@@ -1,6 +1,4 @@
-# Noroff
-# Back-end Development Year 2
-#### Backend.
+# Backend Readme.
 
 ---
 
